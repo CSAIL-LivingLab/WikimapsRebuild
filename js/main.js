@@ -126,3 +126,18 @@ Space = function(name) {
     // array of triangles dividing the space
     this.triangulation = [];
 };
+
+$(document).ready(function() {
+    var map = L.map('map').setView([42.3595462, -71.093284], 17);
+
+
+    L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+            '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+            'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+        id: 'examples.map-i875mjb7'
+    }).addTo(map);
+
+
+});
