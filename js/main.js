@@ -1,6 +1,6 @@
 
 // set up the Leaflet map
-var MAP = L.map('map').setView([42.3595462, -71.093284], 17);
+var map = L.map('map').setView([42.3595462, -71.093284], 17);
 
 L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
     maxZoom: 18,
@@ -8,7 +8,7 @@ L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
         '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
         'Imagery © <a href="http://mapbox.com">Mapbox</a>',
     id: 'examples.map-i875mjb7'
-}).addTo(MAP);
+}).addTo(map);
 
 // define the ESPG:26786 projection for proj4
 proj4.defs('EPSG:26786', "+proj=lcc +lat_1=41.71666666666667 +lat_2=42.68333333333333 +lat_0=41 +lon_0=-71.5 +x_0=182880.3657607315 +y_0=0 +ellps=clrk66 +datum=NAD27 +to_meter=0.3048006096012192 +no_defs");
@@ -40,14 +40,33 @@ getRoute = function() {
     });
 }
 
+var latlngs = [];
 var mapRoute = function(route) {
     // convert the route coordinates to Lat, Lon
     // plot them to the map
-    var marker = L.marker([42.36253, -71.09148]).addTo(MAP);
+    // var marker = L.marker([42.36253, -71.09148]).addTo(map);
+    // var marker2 = L.marker([-71.09148, 42.36253]).addTo(map);
 
-    // latLonRoute.convert(route.path);
+    // [[lat, lon], [lat, lon]]
+    latlngs = Route.convert(route.path);
+
+    // convert to latLngAray to leaflet [LatLng]
+    // var latlng = L.latLng(50.5, 30.5);
+    for (i = 0; i< latlngs.length; i++) {
+        lat = latlngs[i][0];
+        lng = latlngs[i][1];
+
+        latlngs[i] = L.latLng(lat, lng);
+    }
+
+    // create the line
+    // L.polyline(latlngs, {color: 'red'}).addTo(map);
+    console.log("foo");
+
+    // zoom the map to the polyline
+    // map.fitBounds(polyline.getBounds());
     
-
+    // return latlngs;
 }
 
 
@@ -160,8 +179,8 @@ Route.convert = function(arr) {
             x = arr[i][0];
             y = arr[i][1];
 
-            latLon = proj4("EPSG:26786", "WGS84", [y, x]);
-            conversionArr.push(latLon);
+            latLng = proj4("EPSG:26786", "WGS84", [y, x]);
+            conversionArr.push(latLng);
         };
     return conversionArr;
     };
