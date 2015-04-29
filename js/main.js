@@ -50,22 +50,36 @@ var mapRoute = function(route) {
     // var marker = L.marker([42.36253, -71.09148]).addTo(map);
     // var marker2 = L.marker([-71.09148, 42.36253]).addTo(map);
 
-    // [[lat, lon], [lat, lon]]
-    latlngs = Route.convert(route.path);
+    // [[lat, lng], [lat, lng]]
+    pathArr = proj4.convertArr(route.path);
 
     // convert to latLngAray to leaflet [LatLng]
     // var latlng = L.latLng(50.5, 30.5);
-    for (i = 0; i < latlngs.length; i++) {
-        lat = latlngs[i][0];
-        lng = latlngs[i][1];
+    for (var i = 0; i < pathArr.length; i++) {
+        lng = pathArr[i][0];
+        lat = pathArr[i][1];
 
-        latlngs[i] = L.latLng(lng, lat);
+        pathArr[i] = L.latLng(lng, lat);
     }
 
-    // create the line
-    var polyline = L.polyline(latlngs, {
+    // create the line and add to map
+    var polyline = L.polyline(pathArr, {
         color: 'red'
     }).addTo(map);
+
+    
+    // plot the spaces along the route
+    for (var i = 0; i < route.spaces.length; i++) {
+        // for each space along the route
+        space = route.spaces[i];
+
+        // convert to spherical coordinates
+        contourArr = proj4.convertArr(space.contour);
+
+        // plot the contour
+        var polygon = L.polygon(contourArr).addTo(map);
+        polygon.weight = 1;
+    }
 
     // zoom the map to the polyline
     map.fitBounds(polyline.getBounds());
@@ -171,23 +185,6 @@ Route = function(from, to, type) {
 
 };
 
-Route.convert = function(arr) {
-    // class level method
-    // converts an array of points from MaSP to Lat/Lon
-    // assumes an array of [[x, y], [x, y]]
-    // returns [[lon, lat], [lng, lat]];
-    conversionArr = [];
-    for (var i = 0; i < arr.length; i++) {
-        x = arr[i][0];
-        y = arr[i][1];
-
-        latLng = proj4("EPSG:26786", "WGS84", [x, y]);
-        conversionArr.push(latLng);
-    };
-    return conversionArr;
-};
-
-
 Space = function(name) {
     // space object (for rooms/triangles)
     this.name = name;
@@ -201,4 +198,21 @@ Space = function(name) {
 
     // array of triangles dividing the space
     this.triangulation = [];
+};
+
+proj4.convertArr = function(arr) {
+    // class level method
+    // converts an array of points from MaSP spherical Lat/Lon
+    // assumes an array of [[x, y], [x, y]]
+    // returns [[lng, lat], [lng, lat]];
+    conversionArr = [];
+    for (var i = 0; i < arr.length; i++) {
+        x = arr[i][0];
+        y = arr[i][1];
+
+        latLng = proj4("EPSG:26786", "WGS84", [x, y]);
+        lngLat = [latLng[1],latLng[0]];
+        conversionArr.push(lngLat);
+    };
+    return conversionArr;
 };
