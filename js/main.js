@@ -26,7 +26,7 @@ L.tileLayer(MIT_URL).addTo(map);
 // }).addTo(map);
 
 // define the ESPG:26786 projection for proj4
-proj4.defs('EPSG:26786', "+proj=lcc +lat_1=41.71666666666667 +lat_2=42.68333333333333 +lat_0=41 +lon_0=-71.5 +x_0=182880.3657607315 +y_0=0 +ellps=clrk66 +datum=NAD27 +to_meter=0.3048006096012192 +no_defs");
+proj4.defs('EPSG:26786', "+proj=lcc +lat_1=41.71666666666667 +lat_2=42.68333333333333 +lat_0=41 +lon_0=-71.5 +x_0=182880.3657607315 +y_0=0 +ellps=GRS80 +datum=NAD83 +to_meter=0.3048006096012192 +no_defs");
 
 // prevent the form from reloading the page on submission.
 $("#route-form").submit(function(e) {
