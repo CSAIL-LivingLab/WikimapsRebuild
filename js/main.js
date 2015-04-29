@@ -1,13 +1,29 @@
-// set up the Leaflet map
-var map = L.map('map').setView([42.3595462, -71.093284], 17);
+// come global vars
+WORLD_URL = 'http://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}';
+MIT_URL = 'http://maps.mit.edu/pub/rest/services/basemap/WhereIs_Base_Topo/MapServer/tile/{z}/{y}/{x}';
 
-L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
-    maxZoom: 18,
-    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+MB_ATTR = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
         '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-        'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-    id: 'examples.map-i875mjb7'
-}).addTo(map);
+        'Imagery © <a href="http://mapbox.com">Mapbox</a>';
+
+MB_URL = 'http://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png';
+
+OSM_URL = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+OSM_ATTRIB = '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+
+// set up the Leaflet map
+var map = L.map('map').setView([42.361648260887, -71.0905194348], 18);
+
+L.tileLayer(WORLD_URL).addTo(map);
+L.tileLayer(MIT_URL).addTo(map);
+    
+// L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
+//     maxZoom: 18,
+//     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+//         '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+//         'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+//     id: 'examples.map-i875mjb7'
+// }).addTo(map);
 
 // define the ESPG:26786 projection for proj4
 proj4.defs('EPSG:26786', "+proj=lcc +lat_1=41.71666666666667 +lat_2=42.68333333333333 +lat_0=41 +lon_0=-71.5 +x_0=182880.3657607315 +y_0=0 +ellps=clrk66 +datum=NAD27 +to_meter=0.3048006096012192 +no_defs");
