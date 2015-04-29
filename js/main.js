@@ -1,29 +1,17 @@
 
-$(document).ready(function() {
-    // set up the Leaflet map
-    var map = L.map('map').setView([42.3595462, -71.093284], 17);
-    L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
-        maxZoom: 18,
-        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-            '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-            'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-        id: 'examples.map-i875mjb7'
-    }).addTo(map);
+// set up the Leaflet map
+var MAP = L.map('map').setView([42.3595462, -71.093284], 17);
 
-    // define the ESPG:26786 projection for proj4
-    proj4.defs('EPSG:26786', "+proj=lcc +lat_1=41.71666666666667 +lat_2=42.68333333333333 +lat_0=41 +lon_0=-71.5 +x_0=182880.3657607315 +y_0=0 +ellps=clrk66 +datum=NAD27 +to_meter=0.3048006096012192 +no_defs");
+L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
+    maxZoom: 18,
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+        '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+        'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+    id: 'examples.map-i875mjb7'
+}).addTo(MAP);
 
-});
-
-
-// define proj4 plane
-
-            // convert clicked coordinates from latlng to NAD27
-// res = proj4("EPSG:26786", "WGS84", [e.latlng.lng, e.latlng.lat]);
-
-
-//I'm not going to redefine those two in latter examples.
-
+// define the ESPG:26786 projection for proj4
+proj4.defs('EPSG:26786', "+proj=lcc +lat_1=41.71666666666667 +lat_2=42.68333333333333 +lat_0=41 +lon_0=-71.5 +x_0=182880.3657607315 +y_0=0 +ellps=clrk66 +datum=NAD27 +to_meter=0.3048006096012192 +no_defs");
 
 
 
@@ -55,20 +43,10 @@ getRoute = function() {
 var mapRoute = function(route) {
     // convert the route coordinates to Lat, Lon
     // plot them to the map
+    var marker = L.marker([42.36253, -71.09148]).addTo(MAP);
 
-    console.log(route)
-
-    // convert the path to lat lon
-    // for (var i = 0; i< route.path.length; i++) {
-    //     x = route.path[i][0];
-    //     y = route.path[i][1];
-
-    //     latLon = proj4("EPSG:26786", "WGS84", [y, x]);
-    // };
-
-    console.log(Route.convert(route.path));
-
-
+    // latLonRoute.convert(route.path);
+    
 
 }
 
@@ -176,6 +154,7 @@ Route.convert = function(arr) {
     // class level method
     // converts an array of points from MaSP to Lat/Lon
     // assumes an array of [[x, y], [x, y]]
+    // returns [[lat, lon], [lat, lon]];
     conversionArr = [];
     for (var i = 0; i< arr.length; i++) {
             x = arr[i][0];
