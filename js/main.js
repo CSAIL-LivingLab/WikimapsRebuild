@@ -1,7 +1,39 @@
+
+$(document).ready(function() {
+    // set up the Leaflet map
+    var map = L.map('map').setView([42.3595462, -71.093284], 17);
+    L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+            '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+            'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+        id: 'examples.map-i875mjb7'
+    }).addTo(map);
+
+    // define the ESPG:26786 projection for proj4
+    proj4.defs('EPSG:26786', "+proj=lcc +lat_1=41.71666666666667 +lat_2=42.68333333333333 +lat_0=41 +lon_0=-71.5 +x_0=182880.3657607315 +y_0=0 +ellps=clrk66 +datum=NAD27 +to_meter=0.3048006096012192 +no_defs");
+
+});
+
+
+// define proj4 plane
+
+            // convert clicked coordinates from latlng to NAD27
+// res = proj4("EPSG:26786", "WGS84", [e.latlng.lng, e.latlng.lat]);
+
+
+//I'm not going to redefine those two in latter examples.
+
+
+
+
 getRoute = function() {
+    // This gets results from the routing server when
+    // the user clicks the "Route" button
 
     var from = $("#from_field").val().toUpperCase();
     var to = $("#to_field").val().toUpperCase();
+    var route;
 
     routeURL = 'http://wikimap.csail.mit.edu/cgi-bin/route.xml?' + from + '+' + to + '+debug';
     // directURL = 'http://wikimap.csail.mit.edu/cgi-bin/directions.xml?';
@@ -16,12 +48,28 @@ getRoute = function() {
         context: null,
         dataType: "xml",
     }).done(function(xml) {
-        parseRoute(xml)
+        parseAndMapRoute(xml, mapRoute);
     });
+}
 
+var mapRoute = function(route) {
+    // convert the route coordinates to Lat, Lon
+    // plot them to the map
+
+    console.log(route)
+
+
+    for (var i = 0; i< route.path.length; i++) {
+        x = route.path[i][0];
+        y = route.path[i][1];
+
+        latLon = proj4("EPSG:26786", "WGS84", [y, x]);
+    };
 
 }
-var parseRoute = function(result) {
+
+
+var parseAndMapRoute = function(result, callback) {
     // 1) Returns a route object, which contains points for the user to walk on.
     // 2) If spaces are available, creates an array of spaces (rooms) which are along the route.
     //     2.1) All rooms are divided into triangles.
@@ -95,11 +143,13 @@ var parseRoute = function(result) {
 
         route.spaces.push(space);
     }
-    return route;
+
+    callback(route);
 }
 
-// route object (for users to walk on)
+
 Route = function(from, to, type) {
+    // route object (for users to walk on)
     this.from = from;
     this.to = to;
     this.type = type;
@@ -112,8 +162,9 @@ Route = function(from, to, type) {
     this.spaces = []
 };
 
-// space object (for rooms/triangles)
+
 Space = function(name) {
+    // space object (for rooms/triangles)
     this.name = name;
     this.color = "#FF0000";
 
@@ -127,17 +178,3 @@ Space = function(name) {
     this.triangulation = [];
 };
 
-$(document).ready(function() {
-    var map = L.map('map').setView([42.3595462, -71.093284], 17);
-
-
-    L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
-        maxZoom: 18,
-        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-            '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-            'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-        id: 'examples.map-i875mjb7'
-    }).addTo(map);
-
-
-});
