@@ -13,9 +13,9 @@ L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
 proj4.defs('EPSG:26786', "+proj=lcc +lat_1=41.71666666666667 +lat_2=42.68333333333333 +lat_0=41 +lon_0=-71.5 +x_0=182880.3657607315 +y_0=0 +ellps=clrk66 +datum=NAD27 +to_meter=0.3048006096012192 +no_defs");
 
 // prevent the form from reloading the page on submission.
-    $("#route-form").submit(function(e) {
-        e.preventDefault();
-    });
+$("#route-form").submit(function(e) {
+    e.preventDefault();
+});
 
 
 getRoute = function() {
@@ -55,15 +55,17 @@ var mapRoute = function(route) {
 
     // convert to latLngAray to leaflet [LatLng]
     // var latlng = L.latLng(50.5, 30.5);
-    for (i = 0; i< latlngs.length; i++) {
-        lng = latlngs[i][0];
-        lat = latlngs[i][1];
+    for (i = 0; i < latlngs.length; i++) {
+        lat = latlngs[i][0];
+        lng = latlngs[i][1];
 
-        latlngs[i] = L.latLng(lat, lng);
+        latlngs[i] = L.latLng(lng, lat);
     }
 
     // create the line
-    var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
+    var polyline = L.polyline(latlngs, {
+        color: 'red'
+    }).addTo(map);
 
     // zoom the map to the polyline
     map.fitBounds(polyline.getBounds());
@@ -173,17 +175,17 @@ Route.convert = function(arr) {
     // class level method
     // converts an array of points from MaSP to Lat/Lon
     // assumes an array of [[x, y], [x, y]]
-    // returns [[lat, lon], [lat, lon]];
+    // returns [[lon, lat], [lng, lat]];
     conversionArr = [];
-    for (var i = 0; i< arr.length; i++) {
-            x = arr[i][0];
-            y = arr[i][1];
+    for (var i = 0; i < arr.length; i++) {
+        x = arr[i][0];
+        y = arr[i][1];
 
-            latLng = proj4("EPSG:26786", "WGS84", [y, x]);
-            conversionArr.push(latLng);
-        };
-    return conversionArr;
+        latLng = proj4("EPSG:26786", "WGS84", [x, y]);
+        conversionArr.push(latLng);
     };
+    return conversionArr;
+};
 
 
 Space = function(name) {
@@ -200,4 +202,3 @@ Space = function(name) {
     // array of triangles dividing the space
     this.triangulation = [];
 };
-
