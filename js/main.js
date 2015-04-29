@@ -58,13 +58,17 @@ var mapRoute = function(route) {
 
     console.log(route)
 
+    // convert the path to lat lon
+    // for (var i = 0; i< route.path.length; i++) {
+    //     x = route.path[i][0];
+    //     y = route.path[i][1];
 
-    for (var i = 0; i< route.path.length; i++) {
-        x = route.path[i][0];
-        y = route.path[i][1];
+    //     latLon = proj4("EPSG:26786", "WGS84", [y, x]);
+    // };
 
-        latLon = proj4("EPSG:26786", "WGS84", [y, x]);
-    };
+    console.log(Route.convert(route.path));
+
+
 
 }
 
@@ -150,17 +154,38 @@ var parseAndMapRoute = function(result, callback) {
 
 Route = function(from, to, type) {
     // route object (for users to walk on)
-    this.from = from;
-    this.to = to;
-    this.type = type;
+
+    var that = {};
+
+    that.from = from;
+    that.to = to;
+    that.type = type;
 
     // array of points composing a path
-    this.path = [];
+    that.path = [];
 
     // array of spaces contained in the route
     // typically not populated unless debug mode is on
-    this.spaces = []
+    that.spaces = []
+
+    return that;
+
 };
+
+Route.convert = function(arr) {
+    // class level method
+    // converts an array of points from MaSP to Lat/Lon
+    // assumes an array of [[x, y], [x, y]]
+    conversionArr = [];
+    for (var i = 0; i< arr.length; i++) {
+            x = arr[i][0];
+            y = arr[i][1];
+
+            latLon = proj4("EPSG:26786", "WGS84", [y, x]);
+            conversionArr.push(latLon);
+        };
+    return conversionArr;
+    };
 
 
 Space = function(name) {
