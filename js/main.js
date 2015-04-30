@@ -1,15 +1,15 @@
 // come global vars
-WORLD_URL = 'http://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}';
-MIT_URL = 'http://maps.mit.edu/pub/rest/services/basemap/WhereIs_Base_Topo/MapServer/tile/{z}/{y}/{x}';
+WORLD_URL = 'https://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}';
+MIT_URL = 'https://maps.mit.edu/pub/rest/services/basemap/WhereIs_Base_Topo/MapServer/tile/{z}/{y}/{x}';
 
 MB_ATTR = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
         '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
         'Imagery © <a href="http://mapbox.com">Mapbox</a>';
 
-MB_URL = 'http://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png';
+MB_URL = 'https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png';
 
-OSM_URL = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-OSM_ATTRIB = '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+OSM_URL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+OSM_ATTRIB = '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
 // set up the Leaflet map
 var map = L.map('map').setView([42.361648260887, -71.0905194348], 18);
@@ -48,7 +48,7 @@ getRoute = function() {
     // roomURL = 'http://wikimap.csail.mit.edu/cgi-bin/room.xml?', '+', '+';
     // proxURL = 'http://wikimap.csail.mit.edu/cgi-bin/proximity.xml?', '+', '+', '+', '+';
 
-    // replace with stock xml file for now, to avoid XSS restrictions
+    // replace with stock xml file for now, to avoid mixed content http vs https restrictions
     // to enable, launch $./Google\ Chrome --allow-file-access-from-files
     $.ajax({
         url: 'route.xml%3FW84-102+1-190+debug.xml',
