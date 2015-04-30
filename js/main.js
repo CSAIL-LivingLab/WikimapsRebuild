@@ -51,7 +51,7 @@ getRoute = function() {
     // replace with stock xml file for now, to avoid XSS restrictions
     // to enable, launch $./Google\ Chrome --allow-file-access-from-files
     $.ajax({
-        url: 'file:///Users/arcarter/code/MapsRebuild/route.xml%3FW84-102+1-190+debug.xml',
+        url: 'route.xml%3FW84-102+1-190+debug.xml',
         context: null,
         dataType: "xml",
     }).done(function(xml) {
