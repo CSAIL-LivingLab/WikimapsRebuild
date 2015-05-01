@@ -1,31 +1,19 @@
 // come global vars
 WORLD_URL = 'https://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}';
 MIT_URL = 'https://maps.mit.edu/pub/rest/services/basemap/WhereIs_Base_Topo/MapServer/tile/{z}/{y}/{x}';
-
 MB_ATTR = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
         '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
         'Imagery © <a href="http://mapbox.com">Mapbox</a>';
-
 MB_URL = 'https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png';
-
 OSM_URL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 OSM_ATTRIB = '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
 // set up the Leaflet map
 var map = L.map('map').setView([42.361648260887, -71.0905194348], 18);
-
 L.tileLayer(WORLD_URL).addTo(map);
 L.tileLayer(MIT_URL).addTo(map);
-    
-// L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
-//     maxZoom: 18,
-//     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-//         '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-//         'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-//     id: 'examples.map-i875mjb7'
-// }).addTo(map);
 
-// define the ESPG:26786 projection for proj4
+// define the modified ESPG:26786 projection for proj4
 proj4.defs('EPSG:26786', "+proj=lcc +lat_1=41.71666666666667 +lat_2=42.68333333333333 +lat_0=41 +lon_0=-71.5 +x_0=182880.3657607315 +y_0=0 +ellps=GRS80 +datum=NAD83 +to_meter=0.3048006096012192 +no_defs");
 
 // prevent the form from reloading the page on submission.
@@ -42,7 +30,7 @@ getRoute = function() {
     var to = $("#to_field").val().toUpperCase();
     var route;
 
-    routeURL = 'http://wikimap.csail.mit.edu/cgi-bin/route.xml?' + from + '+' + to + '+debug';
+    routeURL = '/cgi-bin/route.xml?' + from + '+' + to + '+debug';
     // directURL = 'http://wikimap.csail.mit.edu/cgi-bin/directions.xml?';
     // spaceURL = 'http://wikimap.csail.mit.edu/cgi-bin/space.xml?';
     // roomURL = 'http://wikimap.csail.mit.edu/cgi-bin/room.xml?', '+', '+';
@@ -50,8 +38,9 @@ getRoute = function() {
 
     // replace with stock xml file for now, to avoid mixed content http vs https restrictions
     // to enable, launch $./Google\ Chrome --allow-file-access-from-files
+    // route.xml%3FW84-102+1-190+debug.xml
     $.ajax({
-        url: 'route.xml%3FW84-102+1-190+debug.xml',
+        url: routeURL,
         context: null,
         dataType: "xml",
     }).done(function(xml) {
@@ -180,7 +169,6 @@ var parseAndMapRoute = function(result, callback) {
     callback(route);
 }
 
-
 Route = function(from, to, type) {
     // route object (for users to walk on)
 
@@ -232,3 +220,16 @@ proj4.convertArr = function(arr) {
     };
     return conversionArr;
 };
+
+proj4.clearPolylines = function(arra) {
+    for(i in map._layers) {
+        if(map._layers[i]._path != undefined) {
+            try {
+                map.removeLayer(map._layers[i]);
+            }
+            catch(e) {
+                console.log("problem with " + e + map._layers[i]);
+            }
+        }
+    }
+}
