@@ -55,6 +55,9 @@ var mapRoute = function(route) {
     // var marker = L.marker([42.36253, -71.09148]).addTo(map);
     // var marker2 = L.marker([-71.09148, 42.36253]).addTo(map);
 
+    // clear existing routes
+    proj4.clearPolylines();
+
     // [[lat, lng], [lat, lng]]
     pathArr = proj4.convertArr(route.path);
 
