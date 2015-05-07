@@ -30,7 +30,7 @@ getRoute = function() {
     var to = $("#to_field").val().toUpperCase();
     var route;
 
-    routeURL = '/cgi-bin/route.xml?' + from + '+' + to + '+debug';
+    routeURL = '/cgi-bin/route.xml?' + from + '+' + to;
     // directURL = 'http://wikimap.csail.mit.edu/cgi-bin/directions.xml?';
     // spaceURL = 'http://wikimap.csail.mit.edu/cgi-bin/space.xml?';
     // roomURL = 'http://wikimap.csail.mit.edu/cgi-bin/room.xml?', '+', '+';
