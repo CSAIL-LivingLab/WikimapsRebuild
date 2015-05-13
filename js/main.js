@@ -31,6 +31,7 @@ getRoute = function() {
     var route;
 
     routeURL = '/cgi-bin/route.xml?' + from + '+' + to;
+    routeURL = 'http://localhost/~arcarter/cgi/first.cgi?from=' + from + "&to=" + to;
     // directURL = 'http://wikimap.csail.mit.edu/cgi-bin/directions.xml?';
     // spaceURL = 'http://wikimap.csail.mit.edu/cgi-bin/space.xml?';
     // roomURL = 'http://wikimap.csail.mit.edu/cgi-bin/room.xml?', '+', '+';
