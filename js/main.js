@@ -14,7 +14,7 @@ L.tileLayer(WORLD_URL).addTo(map);
 L.tileLayer(MIT_URL).addTo(map);
 
 // define the modified ESPG:26786 projection for proj4
-proj4.defs('EPSG:26786', "+proj=lcc +lat_1=41.71666666666667 +lat_2=42.68333333333333 +lat_0=41 +lon_0=-71.5 +x_0=182880.3657607315 +y_0=0 +ellps=GRS80 +datum=NAD83 +to_meter=0.3048006096012192 +no_defs");
+proj4.defs('EPSG:26786', "+proj=lcc +lat_1=41.71666666666667 +lat_2=42.68333333333333 +lat_0=41 +lon_0=-71.5 +x_0=182880.3657607315 +y_0=0 +ellps=NAD83 +datum=NAD83 +to_meter=0.3048006096012192 +no_defs");
 
 // prevent the form from reloading the page on submission.
 $("#route-form").submit(function(e) {
@@ -30,8 +30,8 @@ getRoute = function() {
     var to = $("#to_field").val().toUpperCase();
     var route;
 
-    routeURL = '/cgi-bin/route.xml?' + from + '+' + to;
-    routeURL = 'http://localhost/~arcarter/cgi/first.cgi?from=' + from + "&to=" + to;
+    // routeURL = '/cgi-bin/route.xml?' + from + '+' + to;
+    routeURL = 'http://saw.csail.mit.edu/cgi-bin/route.cgi?from=' + from + "&to=" + to;
     // directURL = 'http://wikimap.csail.mit.edu/cgi-bin/directions.xml?';
     // spaceURL = 'http://wikimap.csail.mit.edu/cgi-bin/space.xml?';
     // roomURL = 'http://wikimap.csail.mit.edu/cgi-bin/room.xml?', '+', '+';
